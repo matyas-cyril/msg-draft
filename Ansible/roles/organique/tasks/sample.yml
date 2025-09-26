@@ -55,3 +55,37 @@
     inventory_hostname | upper is regex("^CYRUS_BACKEND_02$")
   tags:
     - sample
+
+- name: "Établir un quota"
+  shell: echo "sq user/{{ item.mailbox }} {{ item.quota }}" | cyradm -u cyrus --password Cyrus localhost
+  with_items:
+    - { mailbox: 'benoit', quota: 50000 }
+    - { mailbox: 'cyril', quota: 50000 }
+    - { mailbox: 'julien', quota: 50000 }
+    - { mailbox: 'jessy', quota: 50000 }
+    - { mailbox: 'olivier', quota: 50000 }
+    - { mailbox: 'samy', quota: 50000 }
+    - { mailbox: 'bal-org-01', quota: 50000 }
+    - { mailbox: 'bal-org-02', quota: 50000 }
+    - { mailbox: 'bal-org-03', quota: 50000 }
+  when:
+    inventory_hostname | upper is regex("^CYRUS_FRONTEND_01$")
+  tags:
+    - sample
+
+- name: "Mettre des droits sur les BAL Org"
+  shell: echo "sam user/{{ item.mailbox }} {{ item.user }} {{ item.acl }}" | cyradm -u cyrus --password Cyrus localhost
+  with_items:
+    - { mailbox: 'bal-org-01', user: 'cyril', acl: 'all' }
+    - { mailbox: 'bal-org-01', user: 'samy', acl: 'all' }
+    - { mailbox: 'bal-org-02', user: 'benoit', acl: 'all' }
+    - { mailbox: 'bal-org-02', user: 'cyril', acl: 'all' }
+    - { mailbox: 'bal-org-02', user: 'olivier', acl: 'all' }
+    - { mailbox: 'bal-org-03', user: 'samy', acl: 'all' }
+    - { mailbox: 'bal-org-03', user: 'olivier', acl: 'all' }    
+    - { mailbox: 'bal-org-03', user: 'jessy', acl: 'all' }  
+    - { mailbox: 'bal-org-03', user: 'julien', acl: 'all' }    
+  when:
+    inventory_hostname | upper is regex("^CYRUS_FRONTEND_02$")
+  tags:
+    - sample
