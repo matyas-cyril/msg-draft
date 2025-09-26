@@ -1,0 +1,31 @@
+---
+
+- name: "Plateforme Cyrus Murder"
+  import_tasks:
+    file: murder.yml
+  when:
+    inventory_hostname | upper is regex("^CYRUS_MURDER$")
+  tags:
+    - install
+
+- name: "Plateforme Cyrus Backend"
+  import_tasks:
+    file: backend.yml
+  when:
+    inventory_hostname | upper is regex("^CYRUS_BACKEND_\d+$")
+  tags:
+    - install
+
+- name: "Plateforme Cyrus Frontend"
+  import_tasks:
+    file: frontend.yml
+  when:
+    inventory_hostname | upper is regex("^CYRUS_FRONTEND_\d+$")
+  tags:
+    - install
+
+- name: "Création des utilisateurs SASL"
+  import_tasks:
+    file: sasl_users.yml
+  tags:
+    - install

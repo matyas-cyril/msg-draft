@@ -1,0 +1,11 @@
+# handlers file for interperso
+---
+- name: restart_postfix
+  service:
+    name: postfix
+    state: restarted
+
+- name: restart_cyrus
+  service:
+    name: cyrus-imapd
+    state: restarted

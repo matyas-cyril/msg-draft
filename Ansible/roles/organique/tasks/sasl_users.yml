@@ -1,0 +1,22 @@
+---
+
+- name: "Ajouter l'utilisateur SASL cyrus"
+  shell: echo -n "Cyrus" | saslpasswd2 -p -c cyrus
+  tags:
+    - install
+
+- name: "Ajouter l'utilisateur SASL mupdateman"
+  shell: echo -n "Mupdateman" | saslpasswd2 -p -c mupdateman
+  when:
+    inventory_hostname | upper is regex("^CYRUS_MURDER$")
+  tags:
+    - install
+
+- name: "Ajouter l'utilisateur SASL mailproxy"
+  shell: echo -n "{{ item.password }}" | saslpasswd2 -p -c "{{ item.username }}"
+  with_items:
+    - { username: 'mailproxy', password: 'Mailproxy' }
+  when:
+    inventory_hostname | upper is regex("^CYRUS_BACKEND_\d+$")
+  tags:
+    - install

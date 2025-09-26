@@ -1,0 +1,15 @@
+# vars file for interperso
+---
+
+_hostname: "{%- if hostname is string -%}{{ hostname | trim }}{%- else -%}{{ ansible_hostname }}{%- endif -%}"
+_hostname_fqdn: "{%- if hostname_fqdn is string -%}{{ hostname_fqdn | trim }}{%- else -%}{{ _hostname + '.localhost' | string }}{%- endif -%}"
+
+_mynetworks: "{%- if mynetworks is string -%}{{ mynetworks | trim }}{%- else -%}{{ '127.0.0.1/8' | string }}{%- endif -%}"
+
+_mailbox_size_limit: "{%- if mailbox_size_limit is integer -%}{{ mailbox_size_limit }}{%- else -%}{{ 124857600 | int }}{%- endif -%}"
+
+_relay_domains: "{%- if relay_domains is string -%}{{ relay_domains | trim }}{%- else -%}{{ '' }}{%- endif -%}"
+
+_relayhost: "{%- if relayhost is string -%}{{ relayhost | trim }}{%- else -%}{{ '' }}{%- endif -%}"
+
+_default_domain: "{%- if default_domain is string -%}{{ default_domain | trim }}{%- else -%}{{ '$myhostname'  }}{%- endif -%}"

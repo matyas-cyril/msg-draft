@@ -1,0 +1,38 @@
+---
+
+- hosts: localhost
+
+  gather_facts: no
+
+  tasks:
+
+    - name: "Démarrer les services Docker de la plateforme"
+      command: docker compose -f ../Docker/plateforme.yml up -d
+
+
+- hosts: cyrus_organique
+
+  gather_facts: yes
+
+  tasks:
+
+    - name: "Installer Cyrus / Postfix - plateforme Organique"
+      block:
+        - include_role:
+            name: organique
+          tags:
+            - install
+      rescue:
+        - debug:
+            msg: "Erreur lors de l'installation de Cyrus/Postfix"
+
+    - name: "Ajout des utilisateurs pour le test"
+      block:
+        - include_role:
+            name: organique
+            tasks_from: sample.yml
+          tags:
+            - sample
+      rescue:
+        - debug:
+            msg: "Erreur lors de l'ajout des utilisateurs"

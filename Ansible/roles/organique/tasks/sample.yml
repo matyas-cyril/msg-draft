@@ -1,0 +1,57 @@
+---
+
+- block:
+    - name: "Redémarrer Cyrus-IMAP"
+      systemd:
+        name: cyrus-imapd
+        state: restarted
+        enabled: yes
+      register: restart_result
+  rescue:
+    - name: "Vérifier le statut du service"
+      command: systemctl status cyrus-imapd
+      register: service_status
+      failed_when: false
+  when:
+    inventory_hostname | upper is regex("^CYRUS_\S+END_\d+$")
+  tags:
+    - sample  
+
+- name: "Ajout des utilisaturs de test pour l'authentification"
+  shell: echo -n "{{ item.password }}" | saslpasswd2 -p -c "{{ item.username }}"
+  with_items:
+    - { username: 'benoit', password: 'Benoit' }
+    - { username: 'cyril', password: 'Cyril' }
+    - { username: 'julien', password: 'Julien' }
+    - { username: 'jessy', password: 'Jessy' }
+    - { username: 'olivier', password: 'Olivier' }
+    - { username: 'samy', password: 'Samy' }
+  when:
+    inventory_hostname | upper is regex("^CYRUS_FRONTEND_\d+$")
+  tags:
+    - sample
+
+- name: "Création de mailbox backend 01"
+  shell: echo "cm user/{{ item.mailbox }}" | cyradm -u cyrus --password Cyrus localhost
+  with_items:
+    - { mailbox: 'bal-org-01' }
+    - { mailbox: 'bal-org-02' }
+    - { mailbox: 'bal-org-03' }
+  when:
+    inventory_hostname | upper is regex("^CYRUS_BACKEND_01$")
+  tags:
+    - sample   
+
+- name: "Création de mailbox backend 02"
+  shell: echo "cm user/{{ item.mailbox }}" | cyradm -u cyrus --password Cyrus localhost
+  with_items:
+    - { mailbox: 'benoit' }
+    - { mailbox: 'cyril' }
+    - { mailbox: 'julien' }
+    - { mailbox: 'jessy' }
+    - { mailbox: 'olivier' }
+    - { mailbox: 'samy' }
+  when:
+    inventory_hostname | upper is regex("^CYRUS_BACKEND_02$")
+  tags:
+    - sample

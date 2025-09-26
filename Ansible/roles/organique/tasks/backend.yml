@@ -1,0 +1,36 @@
+---
+
+- name: "Générer les fichiers pour Postfix - Backend"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+    backup: no
+  with_items:
+    - { src: 'backend/postfix/main.conf', dest: '/etc/postfix/main.cf', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'backend/postfix/master.conf', dest: '/etc/postfix/master.cf', owner: 'root', group: 'root', mode: '0644' }
+  notify:
+    restart_postfix
+
+- name: "Générer les fichiers pour Cyrus Imapd - Backend"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+    backup: no
+  with_items:
+    - { src: 'backend/cyrus/cyrus.conf', dest: '/etc/cyrus.conf', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'backend/cyrus/imapd.conf', dest: '/etc/imapd.conf', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'backend/cyrus/imapd-ext.conf', dest: '/etc/imapd-ext.conf', owner: 'root', group: 'root', mode: '0644' }
+  notify:
+    restart_cyrus
+
+- name: "Activer Cyrus au démarrage"
+  service:
+    name: cyrus-imapd
+    state: started
+    enabled: yes
