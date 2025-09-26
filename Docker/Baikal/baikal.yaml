@@ -1,0 +1,25 @@
+system:
+    configured_version: 0.10.1
+    timezone: Europe/Paris
+    card_enabled: true
+    cal_enabled: true
+    dav_auth_type: Digest
+    #Password: Baikal
+    admin_passwordhash: 9dc1c402325657d94811423c491a0aa631b7f2f26889ac6812c3e5db8f7cdf18
+    failed_access_message: 'user %u authentication failure for Baikal'
+    auth_realm: BaikalDAV
+    base_uri: ''
+    invite_from: noreply@_
+database:
+    sqlite_file: /var/www/baikal/Specific/db/db.sqlite
+    backend: pgsql
+    mysql_host: ''
+    mysql_dbname: ''
+    mysql_username: ''
+    mysql_password: ''
+    encryption_key: 9de35780625e38f2a69d70ebacee4b05
+    pgsql_host: 172.100.0.210
+    pgsql_dbname: sabredav
+    pgsql_username: root
+    pgsql_password: PasswordBdd
+

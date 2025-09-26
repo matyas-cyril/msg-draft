@@ -234,7 +234,7 @@ services:
 
   agenda:
     container_name: baikal
-    image: ckulka/baikal:nginx
+    image: ckulka/baikal:0.10.1-nginx
     restart: unless-stopped
     hostname: agenda  
     ports:
@@ -244,6 +244,7 @@ services:
         ipv4_address: 172.100.0.6
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./Baikal/baikal.yaml:/var/www/baikal/config/baikal.yaml
     depends_on:
       - db
 
