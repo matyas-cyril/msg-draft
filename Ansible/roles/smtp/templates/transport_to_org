@@ -1,0 +1,3 @@
+bal-org-01@email.test      smtp:frontend01
+bal-org-02@email.test       smtp:frontend01
+bal-org-03@email.test      smtp:frontend02

@@ -50,7 +50,7 @@
   command: postmap cdb:/etc/postfix/transport_to_mbx
   when: rst_transport_to_mbx.changed
   notify:
-    restart_cyrus
+    restart_postfix
   tags:
     - install
 

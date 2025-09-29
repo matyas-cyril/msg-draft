@@ -1,3 +1,72 @@
-#SPDX-License-Identifier: MIT-0
----
 # tasks file for smtp
+---
+- name: "Creer le répertoire /etc/postfix/sasl/"
+  file:
+    path: /etc/postfix/sasl/
+    state: directory
+    mode: '0755'
+  tags:
+    - install
+
+- name: "Générer les fichiers pour transport_to_org"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+    backup: no
+  with_items:
+    - { src: 'transport_to_org', dest: '/etc/postfix/transport_to_org', owner: 'root', group: 'root', mode: '0644' }
+  register:
+    rst_transport_to_org
+  tags:
+    - install
+
+- name: "Générer les fichiers pour transport_to_pers"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+    backup: no
+  with_items:
+    - { src: 'transport_to_pers', dest: '/etc/postfix/transport_to_pers', owner: 'root', group: 'root', mode: '0644' }
+  register:
+    rst_transport_to_pers
+  tags:
+    - install
+
+- name: "Générer le fichier cdb"
+  command: postmap cdb:/etc/postfix/transport_to_org
+  when: rst_transport_to_org.changed
+  notify:
+    restart_postfix
+  tags:
+    - install
+
+- name: "Générer le fichier cdb"
+  command: postmap cdb:/etc/postfix/transport_to_pers
+  when: rst_transport_to_pers.changed
+  notify:
+    restart_postfix
+  tags:
+    - install
+
+- name: "Générer les fichiers pour Postfix"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+    backup: no
+  with_items:
+    - { src: 'master.conf', dest: '/etc/postfix/master.cf', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'main.conf', dest: '/etc/postfix/main.cf', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'smtpd.conf', dest: '/etc/postfix/sasl/smtpd.conf', owner: 'root', group: 'root', mode: '0644' }
+  notify:
+    restart_postfix
+  tags:
+    - install

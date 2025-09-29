@@ -1,0 +1,36 @@
+---
+
+- hosts: localhost
+
+  gather_facts: no
+
+  tasks:
+
+    - name: "Démarrer les services Docker de la plateforme"
+      command: docker compose -f ../Docker/plateforme.yml up -d
+
+
+- hosts: smtp_postfix
+
+  tasks:
+
+    - name: "Installer la plateforme SMTP Postfix"
+      block:
+        - include_role:
+            name: smtp
+          tags:
+            - install
+      rescue:
+        - debug:
+            msg: "Erreur lors de l'installation de la plateforme SMTP Postfix"
+
+    - name: "Ajout des utilisateurs pour le l'authentification"
+      block:
+        - include_role:
+            name: smtp
+            tasks_from: sample.yml
+          tags:
+            - sample
+      rescue:
+        - debug:
+            msg: "Erreur lors de l'ajout des utilisateurs"

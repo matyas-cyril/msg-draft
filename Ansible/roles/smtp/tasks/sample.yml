@@ -1,0 +1,13 @@
+---
+
+- name: "Ajout des utilisaturs de test pour l'authentification"
+  shell: echo -n "{{ item.password }}" | saslpasswd2 -p -c "{{ item.username }}"
+  with_items:
+    - { username: 'benoit', password: 'Benoit' }
+    - { username: 'cyril', password: 'Cyril' }
+    - { username: 'julien', password: 'Julien' }
+    - { username: 'jessy', password: 'Jessy' }
+    - { username: 'olivier', password: 'Olivier' }
+    - { username: 'samy', password: 'Samy' }
+  tags:
+    - sample

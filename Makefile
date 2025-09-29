@@ -58,6 +58,10 @@ clean:
 	ANSIBLE_CONFIG=Ansible/ansible.cfg \
 	   $(VENV_DIR)/bin/ansible-playbook Ansible/organique-install.yml --tags sample
 
+.deploy_smtp:
+	ANSIBLE_CONFIG=Ansible/ansible.cfg \
+	   $(VENV_DIR)/bin/ansible-playbook Ansible/smtp-install.yml --tags install
+
 .db_init:
 	@docker exec -i postgres_17.6 psql -U root -c "CREATE DATABASE roundcube";
 
@@ -95,6 +99,7 @@ install:
 	$(MAKE) .deploy_docker;
 	$(MAKE) .deploy_interpero;
 	$(MAKE) .deploy_org;
+	$(MAKE) .deploy_smtp;
 	$(MAKE) .db_init;
 	$(MAKE) .db_init_webmail;
 	$(MAKE) .db_init_calendar;
