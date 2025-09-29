@@ -33,6 +33,27 @@
   tags:
     - install
 
+- name: "Copier le fichier de transport"
+  template:
+    src: postfix/transport_to_mbx
+    dest: /etc/postfix/transport_to_mbx
+    owner: root
+    group: root
+    mode: '0644'
+    backup: no
+  register:
+    rst_transport_to_mbx
+  tags:
+    - install 
+
+- name: "Générer le fichier cdb"
+  command: postmap cdb:/etc/postfix/transport_to_mbx
+  when: rst_transport_to_mbx.changed
+  notify:
+    restart_cyrus
+  tags:
+    - install
+
 - name: "Création de l'utilisateur de Cyrus"
   shell: echo -n "{{ item.password }}" | saslpasswd2 -p -c "{{ item.username }}"
   with_items:
