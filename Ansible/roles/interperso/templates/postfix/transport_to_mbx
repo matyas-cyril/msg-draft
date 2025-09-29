@@ -1,0 +1,6 @@
+benoit@email.test      lmtp:unix:/run/cyrus/socket/lmtp
+cyril@email.test       lmtp:unix:/run/cyrus/socket/lmtp
+julien@email.test      lmtp:unix:/run/cyrus/socket/lmtp
+jessy@email.test       lmtp:unix:/run/cyrus/socket/lmtp
+olivier@email.test     lmtp:unix:/run/cyrus/socket/lmtp
+samy@email.test        lmtp:unix:/run/cyrus/socket/lmtp
